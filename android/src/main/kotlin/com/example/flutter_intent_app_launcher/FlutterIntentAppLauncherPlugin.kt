@@ -23,7 +23,7 @@ class FlutterIntentAppLauncherPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    val url = call.argument<String>("intentUrl")
+    val intentUrl = call.argument<String>("intentUrl")
 
     if (intentUrl == null) {
       result.error("INVALID_ARGUMENT", "intentUrl is null", null)
@@ -33,7 +33,7 @@ class FlutterIntentAppLauncherPlugin: FlutterPlugin, MethodCallHandler {
     when (call.method) {
       "getAppUrl" -> {
         try {
-          val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+          val intent = Intent.parseUri(intentUrl, Intent.URI_INTENT_SCHEME)
           result.success(intent.dataString) 
         } catch (e: URISyntaxException) {
           result.error("PARSE_ERROR", e.message, null)
@@ -44,7 +44,7 @@ class FlutterIntentAppLauncherPlugin: FlutterPlugin, MethodCallHandler {
 
       "getPackageName" -> {
         try {
-          val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+          val intent = Intent.parseUri(intentUrl, Intent.URI_INTENT_SCHEME)
           val packageName = intent.`package`
           
           if (packageName != null) {
