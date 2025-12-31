@@ -8,11 +8,12 @@ class MockFlutterIntentAppLauncherPlatform
     with MockPlatformInterfaceMixin
     implements FlutterIntentAppLauncherPlatform {
   @override
-  Future<String?> extractAndroidPackageName(String intentUrl) =>
+  Future<String?> getPackageName(String intentUrl) =>
       Future.value('com.example.test');
 
   @override
-  Future<bool> openAndroidApp(String intentUrl) => Future.value(true);
+  Future<String?> getAppUrl(String intentUrl) =>
+      Future.value('testscheme://host');
 }
 
 void main() {
@@ -24,27 +25,25 @@ void main() {
         initialPlatform, isInstanceOf<MethodChannelFlutterIntentAppLauncher>());
   });
 
-  test('extractAndroidPackageName', () async {
+  test('getPackageName', () async {
     FlutterIntentAppLauncher flutterIntentAppLauncherPlugin =
         FlutterIntentAppLauncher();
     MockFlutterIntentAppLauncherPlatform fakePlatform =
         MockFlutterIntentAppLauncherPlatform();
     FlutterIntentAppLauncherPlatform.instance = fakePlatform;
 
-    expect(
-        await flutterIntentAppLauncherPlugin
-            .extractAndroidPackageName('intent://test'),
+    expect(await flutterIntentAppLauncherPlugin.getPackageName('intent://test'),
         'com.example.test');
   });
 
-  test('openAndroidApp', () async {
+  test('getAppUrl', () async {
     FlutterIntentAppLauncher flutterIntentAppLauncherPlugin =
         FlutterIntentAppLauncher();
     MockFlutterIntentAppLauncherPlatform fakePlatform =
         MockFlutterIntentAppLauncherPlatform();
     FlutterIntentAppLauncherPlatform.instance = fakePlatform;
 
-    expect(await flutterIntentAppLauncherPlugin.openAndroidApp('intent://test'),
-        true);
+    expect(await flutterIntentAppLauncherPlugin.getAppUrl('intent://test'),
+        'testscheme://host');
   });
 }

@@ -21,11 +21,10 @@ class _MyAppState extends State<MyApp> {
   String _resultMessage = '결과가 여기에 표시됩니다.';
   final _plugin = FlutterIntentAppLauncher();
 
-  Future<void> _testExtractPackage() async {
+  Future<void> _testGetPackageName() async {
     String result;
     try {
-      final packageName =
-          await _plugin.extractAndroidPackageName(_urlController.text);
+      final packageName = await _plugin.getPackageName(_urlController.text);
       result = '추출된 패키지명: $packageName';
     } on PlatformException catch (e) {
       result = '에러 발생: ${e.message}';
@@ -36,11 +35,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Future<void> _testOpenApp() async {
+  Future<void> _testGetAppUrl() async {
     String result;
     try {
-      final isOpened = await _plugin.openAndroidApp(_urlController.text);
-      result = isOpened ? '앱 실행 성공!' : '앱 실행 실패 (설치 안 됨)';
+      final appUrl = await _plugin.getAppUrl(_urlController.text);
+      result = '변환된 실행 URL: $appUrl';
     } on PlatformException catch (e) {
       result = '에러 발생: ${e.message}';
     }
@@ -74,12 +73,12 @@ class _MyAppState extends State<MyApp> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: _testExtractPackage,
+                    onPressed: _testGetPackageName,
                     child: const Text('패키지명 추출'),
                   ),
                   ElevatedButton(
-                    onPressed: _testOpenApp,
-                    child: const Text('앱 실행하기'),
+                    onPressed: _testGetAppUrl,
+                    child: const Text('실행 URL 변환'),
                   ),
                 ],
               ),

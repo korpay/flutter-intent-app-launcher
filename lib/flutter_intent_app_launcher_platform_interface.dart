@@ -24,12 +24,11 @@ abstract class FlutterIntentAppLauncherPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<bool> openAndroidApp(String intentUrl) {
-    throw UnimplementedError('openAndroidApp() has not been implemented.');
+  Future<String?> getAppUrl(String intentUrl) {
+    throw UnimplementedError('getAppUrl() has not been implemented.');
   }
 
-  Future<String?> extractAndroidPackageName(String intentUrl) {
-    throw UnimplementedError(
-        'extractAndroidPackageName() has not been implemented.');
+  Future<String?> getPackageName(String intentUrl) {
+    throw UnimplementedError('getPackageName() has not been implemented.');
   }
 }

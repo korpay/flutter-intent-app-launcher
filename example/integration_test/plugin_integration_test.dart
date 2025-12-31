@@ -19,8 +19,7 @@ void main() {
     const testIntentUrl =
         'intent://kakaopay/pg?url=https://...#Intent;scheme=kakaotalk;package=com.kakao.talk;end';
 
-    final String? packageName =
-        await plugin.extractAndroidPackageName(testIntentUrl);
+    final String? packageName = await plugin.getPackageName(testIntentUrl);
 
     expect(packageName, 'com.kakao.talk');
   });

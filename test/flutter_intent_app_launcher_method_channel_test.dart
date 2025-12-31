@@ -14,10 +14,10 @@ void main() {
         .setMockMethodCallHandler(
       channel,
       (MethodCall methodCall) async {
-        if (methodCall.method == 'extractAndroidPackageName') {
+        if (methodCall.method == 'getPackageName') {
           return 'com.test.package';
-        } else if (methodCall.method == 'openAndroidApp') {
-          return true;
+        } else if (methodCall.method == 'getAppUrl') {
+          return 'testscheme://host';
         }
         return null;
       },
@@ -29,12 +29,11 @@ void main() {
         .setMockMethodCallHandler(channel, null);
   });
 
-  test('extractAndroidPackageName', () async {
-    expect(await platform.extractAndroidPackageName('intent://test'),
-        'com.test.package');
+  test('getPackageName', () async {
+    expect(await platform.getPackageName('intent://test'), 'com.test.package');
   });
 
-  test('openAndroidApp', () async {
-    expect(await platform.openAndroidApp('intent://test'), true);
+  test('getAppUrl', () async {
+    expect(await platform.getAppUrl('intent://test'), 'testscheme://host');
   });
 }

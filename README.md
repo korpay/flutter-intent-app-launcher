@@ -1,6 +1,6 @@
 # flutter-intent-app-launcher
 
-Android intent주소를 파싱하여 실행하는 런처 유틸리티
+Android intent주소 파싱 유틸리티
 
 ## Installation
 
@@ -30,11 +30,11 @@ import 'package:flutter_intent_app_launcher/flutter_intent_app_launcher.dart';
 
 final launcher = FlutterIntentAppLauncher();
 
-launcher.openAndroidApp(intentUrl).then((result) {
-  print('App opened: $result');
+launcher.getAppUrl(intentUrl).then((url) {
+  print('App Scheme URL: $url');
 });
 
-launcher.extractAndroidPackageName(intentUrl).then((packageName) {
+launcher.getPackageName(intentUrl).then((packageName) {
   print('Extracted package name: $packageName');
 });
 ```

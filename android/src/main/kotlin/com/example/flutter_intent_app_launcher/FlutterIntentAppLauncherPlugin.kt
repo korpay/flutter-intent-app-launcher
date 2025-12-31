@@ -23,7 +23,7 @@ class FlutterIntentAppLauncherPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    val intentUrl = call.argument<String>("intentUrl")
+    val url = call.argument<String>("intentUrl")
 
     if (intentUrl == null) {
       result.error("INVALID_ARGUMENT", "intentUrl is null", null)
@@ -31,44 +31,34 @@ class FlutterIntentAppLauncherPlugin: FlutterPlugin, MethodCallHandler {
     }
 
     when (call.method) {
-      "openAndroidApp" -> {
-        openAndroidApp(intentUrl, result)
+      "getAppUrl" -> {
+        try {
+          val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+          result.success(intent.dataString) 
+        } catch (e: URISyntaxException) {
+          result.error("PARSE_ERROR", e.message, null)
+        } catch (e: Exception) {
+          result.error("UNKNOWN_ERROR", e.message, null)
+        }
       }
-      "extractAndroidPackageName" -> {
-        extractAndroidPackageName(intentUrl, result)
+
+      "getPackageName" -> {
+        try {
+          val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+          val packageName = intent.`package`
+          
+          if (packageName != null) {
+            result.success(packageName)
+          } else {
+            result.success(null) 
+          }
+        } catch (e: Exception) {
+          result.error("PARSE_ERROR", e.message, null)
+        }
       }
       else -> {
         result.notImplemented()
       }
-    }
-  }
-
-
-  private fun openAndroidApp(url: String, result: Result) {
-    try {
-      val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
-      
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-      if (intent.resolveActivity(context.packageManager) != null) {
-          context.startActivity(intent)
-          result.success(true)
-      } else {
-          result.success(false) 
-      }
-    } catch (e: Exception) {
-      result.error("EXECUTION_ERROR", e.message, null)
-    }
-  }
-
-  private fun extractAndroidPackageName(url: String, result: Result) {
-    try {
-      val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
-      val packageName = intent.`package`
-      
-      result.success(packageName)
-    } catch (e: URISyntaxException) {
-      result.error("PARSE_ERROR", "Invalid Intent URL", null)
     }
   }
 

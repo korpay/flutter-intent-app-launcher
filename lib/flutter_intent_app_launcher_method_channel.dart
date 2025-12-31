@@ -11,16 +11,14 @@ class MethodChannelFlutterIntentAppLauncher
   final methodChannel = const MethodChannel('flutter_intent_app_launcher');
 
   @override
-  Future<bool> openAndroidApp(String intentUrl) async {
-    final result = await methodChannel
-        .invokeMethod<bool>('openAndroidApp', {'intentUrl': intentUrl});
-    return result ?? false;
+  Future<String?> getAppUrl(String intentUrl) async {
+    return await methodChannel
+        .invokeMethod<String>('getAppUrl', {'intentUrl': intentUrl});
   }
 
   @override
-  Future<String?> extractAndroidPackageName(String intentUrl) async {
-    final result = await methodChannel.invokeMethod<String>(
-        'extractAndroidPackageName', {'intentUrl': intentUrl});
-    return result;
+  Future<String?> getPackageName(String intentUrl) async {
+    return await methodChannel
+        .invokeMethod<String>('getPackageName', {'intentUrl': intentUrl});
   }
 }
